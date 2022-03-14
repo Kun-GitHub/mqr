@@ -34,10 +34,7 @@ public class AiReplyPluginExecutor extends AbstractPluginExecutor {
 
         if(null != message){
             if(message.contains("近 20 期")){
-                int z = message.indexOf("\n28");
-                int i = message.indexOf("期：");
-                String qihao = message.substring(z+1,i);
-
+                String qihao = message.substring(message.indexOf("\n283")+1,message.indexOf("期："));
 
                 String body = getCommandge(qihao);
                 if (body != null) {
@@ -47,11 +44,6 @@ public class AiReplyPluginExecutor extends AbstractPluginExecutor {
                     pluginResult.setMessage(body);
                     return pluginResult;
                 }
-
-                PluginResult pluginResult = new PluginResult();
-                pluginResult.setProcessed(true);
-                pluginResult.setMessage("1");
-                return pluginResult;
             }
         }
 
