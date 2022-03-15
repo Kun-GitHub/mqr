@@ -109,63 +109,81 @@ public class AiReplyPluginExecutor extends AbstractPluginExecutor {
                 if(null == obj01 && null == obj02){
                     return null;
                 } else if(null != obj01 && null == obj02){
-                    if ("大双".equals(obj01)) {
-                        return "大"+(score*2)+"小双"+score;
-
-                    } else if ("大单".equals(obj01)) {
-                        if(digital>13){
-                            return "大"+(score*2)+"小单"+score;
-                        } else if (digital%2!=0) {
-                            return "单"+(score*2)+"大双"+score;
-                        } else {
-                            return "大"+(score*2)+"小单"+score;
-                        }
-                    } else if ("小单".equals(obj01)) {
-                        return "小"+(score*2)+"大单"+score;
-                    } else if ("小双".equals(obj01)) {
-                        if(digital<14){
-                            return "小"+(score*2)+"大双"+score;
-                        } else if (digital%2==0) {
-                            return "双"+(score*2)+"小单"+score;
-                        } else {
-                            return "小"+(score*2)+"大双"+score;
-                        }
-                    } else {
-                        return null;
-                    }
+                    return cl(obj01, score, digital);
                 } else if(null == obj01 && null != obj02){
-                    if ("大双".equals(obj02)) {
-                        return "大"+(score*2)+"小双"+score;
-                    } else if ("大单".equals(obj02)) {
-                        return "大"+(score*2)+"小单"+score;
-                    } else if ("小单".equals(obj02)) {
-                        return "小"+(score*2)+"大单"+score;
-                    } else if ("小双".equals(obj02)) {
-                        return "小"+(score*2)+"大双"+score;
-                    } else {
-                        return null;
-                    }
+                    return cl(obj02, score, digital);
                 } else {
-                    if ("大双".equals(obj01)) {
-                        return "大"+(score*2)+"小双"+score;
-                    } else if ("大单".equals(obj01)) {
-                        return "大"+(score*2)+"小单"+score;
-                    } else if ("小单".equals(obj01)) {
-                        return "小"+(score*2)+"大单"+score;
-                    } else if ("小双".equals(obj01)) {
-                        return "小"+(score*2)+"大双"+score;
-                    } else if ("大双".equals(obj02)) {
-                        return "大"+(score*2)+"小双"+score;
-                    } else if ("大单".equals(obj02)) {
-                        return "大"+(score*2)+"小单"+score;
-                    } else if ("小单".equals(obj02)) {
-                        return "小"+(score*2)+"大单"+score;
-                    } else if ("小双".equals(obj02)) {
-                        return "小"+(score*2)+"大双"+score;
+                    String s = null;
+                    if(obj01.equals(obj02)){
+                        return cl(obj01, score, digital);
+                    } else {
+                        for (int i = 0; i < obj01.length(); i++) {
+                            for (int j = 0; j < obj02.length(); j++) {
+                                if((obj01.charAt(i)+"").equals(obj02.charAt(j)+"")){
+                                    s = obj01.charAt(i)+"";
+                                }
+                            }
+                        }
+                    }
+                    if(null != s){
+                        if("大".equals(s)){
+                            return cl("大"+getLetter(digital).charAt(1), score, digital);
+                        } else if("小".equals(s)){
+                            return cl("小"+getLetter(digital).charAt(1), score, digital);
+                        }  else if("单".equals(s)){
+                            return cl(getLetter(digital).charAt(0)+"单", score, digital);
+                        }  else if("双".equals(s)){
+                            return cl(getLetter(digital).charAt(0)+"双", score, digital);
+                        } else {
+                           return null;
+                        }
                     } else {
                         return null;
                     }
                 }
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public String getLetter(Integer integer) {
+        if (0 == integer % 2){
+            if (integer >= 14){
+                return "大双";
+            } else if(integer <= 13){
+                return "小双";
+            }
+        } else if(0 != integer % 2){
+            if (integer >= 14){
+                return "大单";
+            } else if(integer <= 13){
+                return "小单";
+            }
+        }
+        return "  ";
+    }
+
+    private String cl(String obj01, Integer score, Integer digital){
+        if ("大双".equals(obj01)) {
+            return "大"+(score*2)+"小双"+score;
+        } else if ("大单".equals(obj01)) {
+            if(digital>13){
+                return "大"+(score*2)+"小单"+score;
+            } else if (digital%2!=0) {
+                return "单"+(score*2)+"大双"+score;
+            } else {
+                return "大"+(score*2)+"小单"+score;
+            }
+        } else if ("小单".equals(obj01)) {
+            return "小"+(score*2)+"大单"+score;
+        } else if ("小双".equals(obj01)) {
+            if(digital<14){
+                return "小"+(score*2)+"大双"+score;
+            } else if (digital%2==0) {
+                return "双"+(score*2)+"小单"+score;
+            } else {
+                return "小"+(score*2)+"大双"+score;
             }
         } else {
             return null;
