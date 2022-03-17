@@ -32,6 +32,15 @@ public class AiReplyPluginExecutor extends AbstractPluginExecutor {
             defaulted = true,
             robotEvents = { RobotEventEnum.FRIEND_MSG, RobotEventEnum.GROUP_MSG })
     public PluginResult messageHandler(PluginParam pluginParam) {
+
+        if(!pluginParam.getToName().contains("DJJ") && !pluginParam.getToName().contains("YZM") ){
+            // 实例化回复对象
+            PluginResult pluginResult = new PluginResult();
+            pluginResult.setProcessed(true);
+            pluginResult.setMessage(null);
+            return pluginResult;
+        }
+
         // 接收消息
         String message = String.valueOf(pluginParam.getData());
 
@@ -106,17 +115,17 @@ public class AiReplyPluginExecutor extends AbstractPluginExecutor {
                 Integer score = result.getInt("score");
                 Integer digital = result.getInt("digital");
 
-                if(null == obj01 && null == obj02){
+                if((null == obj01 && null == obj02) || ("null".equals(obj01) && "null".equals(obj02))){
                     return null;
-                } else if(null != obj01 && null == obj02){
+                } else if(null != obj01 && !"null".equals(obj01) && "null".equals(obj02)){
                     return cl(obj01, score, digital);
-                } else if(null == obj01 && null != obj02){
+                } else if(null != obj02 && !"null".equals(obj02) && "null".equals(obj01)){
                     return cl(obj02, score, digital);
                 } else {
-                    String s = null;
-                    if(obj01.equals(obj02)){
+                    if(obj01.equals(obj02) && !"null".equals(obj01)){
                         return cl(obj01, score, digital);
                     } else {
+                        String s = null;
                         for (int i = 0; i < obj01.length(); i++) {
                             for (int j = 0; j < obj02.length(); j++) {
                                 if((obj01.charAt(i)+"").equals(obj02.charAt(j)+"")){
@@ -124,21 +133,21 @@ public class AiReplyPluginExecutor extends AbstractPluginExecutor {
                                 }
                             }
                         }
-                    }
-                    if(null != s){
-                        if("大".equals(s)){
-                            return cl("大"+getLetter(digital).charAt(1), score, digital);
-                        } else if("小".equals(s)){
-                            return cl("小"+getLetter(digital).charAt(1), score, digital);
-                        }  else if("单".equals(s)){
-                            return cl(getLetter(digital).charAt(0)+"单", score, digital);
-                        }  else if("双".equals(s)){
-                            return cl(getLetter(digital).charAt(0)+"双", score, digital);
+                        if(null != s){
+                            if("大".equals(s)){
+                                return cl("大"+getLetter(digital).charAt(1), score, digital);
+                            } else if("小".equals(s)){
+                                return cl("小"+getLetter(digital).charAt(1), score, digital);
+                            }  else if("单".equals(s)){
+                                return cl(getLetter(digital).charAt(0)+"单", score, digital);
+                            }  else if("双".equals(s)){
+                                return cl(getLetter(digital).charAt(0)+"双", score, digital);
+                            } else {
+                                return null;
+                            }
                         } else {
-                           return null;
+                            return null;
                         }
-                    } else {
-                        return null;
                     }
                 }
             }
