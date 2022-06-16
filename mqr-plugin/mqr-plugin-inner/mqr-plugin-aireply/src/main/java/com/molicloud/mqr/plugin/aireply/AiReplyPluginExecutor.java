@@ -33,19 +33,19 @@ public class AiReplyPluginExecutor extends AbstractPluginExecutor {
             robotEvents = { RobotEventEnum.FRIEND_MSG, RobotEventEnum.GROUP_MSG })
     public PluginResult messageHandler(PluginParam pluginParam) {
 
-        if(!pluginParam.getToName().contains("DJJ") && !pluginParam.getToName().contains("YZM") ){
-            // 实例化回复对象
-            PluginResult pluginResult = new PluginResult();
-            pluginResult.setProcessed(true);
-            pluginResult.setMessage(null);
-            return pluginResult;
-        }
+//        if(!pluginParam.getToName().toUpperCase().contains("DJJ") && !pluginParam.getToName().toUpperCase().contains("YZM") && !pluginParam.getToName().toUpperCase().contains("YZM")){
+//            // 实例化回复对象
+//            PluginResult pluginResult = new PluginResult();
+//            pluginResult.setProcessed(true);
+//            pluginResult.setMessage(null);
+//            return pluginResult;
+//        }
 
         // 接收消息
         String message = String.valueOf(pluginParam.getData());
 
         if(null != message){
-            if(message.contains("近 20 期")){
+            if(message.replaceAll(" ","").contains("近20期")){
                 qihao = message.substring(message.indexOf("\n283")+1,message.indexOf("期："));
 
                 String body = null;
@@ -56,6 +56,9 @@ public class AiReplyPluginExecutor extends AbstractPluginExecutor {
                 }
                 if (body != null) {
                     try {
+                        RestTemplate client = new RestTemplate();
+                        ResponseEntity<String> response = client.exchange("http://121.4.87.215:8582/digital/digitalAnalyseJnd/saveBet?recordNumber="+qihao+"&bet="+body, HttpMethod.GET, null, String.class);
+
                         Thread.sleep(10000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
